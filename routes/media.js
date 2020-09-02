@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const { APP_NAME } = process.env;
 
-/* GET home page. */
+/* GET media listing. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: APP_NAME });
+  res.send(`Media Service`);
 });
 
 module.exports = router;
