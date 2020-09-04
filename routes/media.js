@@ -53,4 +53,24 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// post media
+router.post("/", async (req, res) => {
+  const { image } = req.body;
+
+  try {
+    const imageRes = await api.post("/media", { image });
+    res.status(201).json(imageRes.data);
+  } catch (error) {
+    if (error.code === "ECONNREFUSED") {
+      res
+        .status(500)
+        .json({ status: "error", message: "service api gateaway unavailable" });
+    }
+
+    res
+      .status(400)
+      .json({ status: "error", message: "failed to create media" });
+  }
+});
+
 module.exports = router;
