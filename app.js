@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/media', mediaRouter);
-app.use('/members', membersRouter);
+app.use('/users', membersRouter);
 app.use('/courses', coursesRouter);
 app.use('/orders', ordersRouter);
 app.use('/payments', paymentsRouter);
