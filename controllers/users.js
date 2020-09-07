@@ -64,4 +64,23 @@ module.exports = {
       return res.status(status).json(data);
     }
   },
+  updateProfile: async (req, res) => {
+    const { email, name, password, profession, avatar } = req.body;
+
+    try {
+      const resUpdate = await api.put(`/users/update/${req.user.id}`, req.body);
+      res.status(200).json(resUpdate.data);
+    } catch (error) {
+      if (error.code === "ECONNREFUSED") {
+        return res.status(500).json({
+          status: "error",
+          message: "service users unavailable",
+        });
+      }
+
+      console.log("error :>> ", error);
+      const { status, data } = error.response;
+      return res.status(status).json(data);
+    }
+  },
 };
