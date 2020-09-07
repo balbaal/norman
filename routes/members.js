@@ -1,9 +1,7 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const usersController = require("../controllers/users");
 
-/* GET members listing. */
-router.get('/', function(req, res, next) {
-  res.send(`Members Service`);
-});
+router.post("/register", usersController.register);
 
 module.exports = router;
