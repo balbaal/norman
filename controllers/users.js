@@ -1,6 +1,7 @@
 const axios = require("../configs/axios");
 const { USER_HOST } = process.env;
 const api = axios(USER_HOST);
+const jwt = require("jsonwebtoken");
 const {
   JWT_SECRET,
   JWT_SECRET_REFRESH_TOKEN,
@@ -32,8 +33,24 @@ module.exports = {
     const { email, password } = req.body;
 
     try {
-      const resUser = await api.post("/users/login", { email, password });
-      return res.status(200).json(resUser.data);
+      const {
+        data: { data },
+      } = await api.post("/users/login", {
+        email,
+        password,
+      });
+      const token = jwt.sign(data, JWT_SECRET, {
+        expiresIn: JWT_ACCESS_TOKEN_EXPIRED,
+      });
+      const refreshToken = jwt.sign(data, JWT_SECRET_REFRESH_TOKEN, {
+        expiresIn: JWT_REFRESH_TOKEN_EXPIRED,
+      });
+
+      await api.post("/refresh-token", { refreshToken, memberId: data.id });
+
+      return res
+        .status(200)
+        .json({ status: "success", data: { token, refreshToken } });
     } catch (error) {
       if (error.code === "ECONNREFUSED") {
         return res.status(500).json({
