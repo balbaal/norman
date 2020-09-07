@@ -22,4 +22,23 @@ module.exports = {
       return res.status(status).json(data);
     }
   },
+  login: async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+      const resUser = await api.post("/users/login", { email, password });
+      return res.status(200).json(resUser.data);
+    } catch (error) {
+      if (error.code === "ECONNREFUSED") {
+        return res.status(500).json({
+          status: "error",
+          message: "service users unavailable",
+        });
+      }
+
+      console.log("error :>> ", error);
+      const { status, data } = error.response;
+      return res.status(status).json(data);
+    }
+  },
 };
