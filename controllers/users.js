@@ -83,4 +83,23 @@ module.exports = {
       return res.status(status).json(data);
     }
   },
+  getProfile: async (req, res) => {
+    const { id } = req.user;
+
+    try {
+      const resUser = await api.get(`/users/${id}`);
+      return res.status(200).json(resUser.data);
+    } catch (error) {
+      if (error.code === "ECONNREFUSED") {
+        return res.status(500).json({
+          status: "error",
+          message: "service users unavailable",
+        });
+      }
+
+      console.log("error :>> ", error);
+      const { status, data } = error.response;
+      return res.status(status).json(data);
+    }
+  },
 };
