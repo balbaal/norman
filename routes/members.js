@@ -7,5 +7,6 @@ router.post("/register", usersController.register);
 router.post("/login", usersController.login);
 router.put("/update", verifyToken, usersController.updateProfile);
 router.get("/", verifyToken, usersController.getProfile);
+router.post("/logout", verifyToken, usersController.logout);
 
 module.exports = router;

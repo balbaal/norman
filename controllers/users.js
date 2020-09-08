@@ -102,4 +102,26 @@ module.exports = {
       return res.status(status).json(data);
     }
   },
+  logout: async (req, res) => {
+    const { id } = req.user;
+
+    try {
+      await api.post("/users/logout", { member_id: id });
+      return res.status(204).json({
+        status: "success",
+        message: `success logout and deleted user id: ${id}`,
+      });
+    } catch (error) {
+      if (error.code === "ECONNREFUSED") {
+        return res.status(500).json({
+          status: "error",
+          message: "service users unavailable",
+        });
+      }
+
+      console.log("error :>> ", error);
+      const { status, data } = error.response;
+      return res.status(status).json(data);
+    }
+  },
 };
